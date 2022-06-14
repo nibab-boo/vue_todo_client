@@ -15,6 +15,7 @@
 
     <div class="todos">
       <div
+      @click="onClick(todo)"
       v-for="todo in allTodos"
       :key="todo.id"
       class="todo"
@@ -32,34 +33,43 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
-export default {
-  // import our getters and actions
-  name: "Todos",
-  methods: {
-    ...mapActions(['fetchTodos', 'deleteTodo', 'updateTodo']),
-    onDoubleClick: function (currentTodo) {
-      if (currentTodo.completed) return;
-      const updatedTodo = {
-        id: currentTodo.id,
-        title: currentTodo.title,
-        completed: !currentTodo.completed,
+  // import { useRoute } from "vue-router";
+  import router from '@/router';
+
+
+  export default {
+    // import our getters and actions
+    name: "Todos",
+    methods: {
+      ...mapActions(['fetchTodos', 'deleteTodo', 'updateTodo']),
+      onDoubleClick: function (currentTodo) {
+        if (currentTodo.completed) return;
+        const updatedTodo = {
+          id: currentTodo.id,
+          title: currentTodo.title,
+          completed: !currentTodo.completed,
+        }
+        this.$store.dispatch("updateTodo", updatedTodo);
+      },
+      onClick: function(currentTodo) {
+        // const route = useRoute();
+        console.log("routing");
+        router.push(`/todos/${currentTodo.id}`);
       }
-      this.$store.dispatch("updateTodo", updatedTodo);
     },
-  },
-  computed: {
-    ...mapGetters([
-      "allTodos",
-    ]),
+    computed: {
+      ...mapGetters([
+        "allTodos",
+      ]),
 
-  },
-  created() {
-    this.fetchTodos();
-    // This can be done if we don't use mapActions
-    // this.$store.dispatch("fetchTodos");
+    },
+    created() {
+      this.fetchTodos();
+      // This can be done if we don't use mapActions
+      // this.$store.dispatch("fetchTodos");
+    }
+
   }
-
-}
 
 </script>
 
