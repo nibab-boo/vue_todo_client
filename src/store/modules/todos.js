@@ -3,17 +3,24 @@ import axios from "axios";
 const api_url = "http://localhost:3000/api/v1/todos";
 
 const state = {
-  todos: []
+  todos: [],
+  todo: {},
 };
 
 const getters = {
-  allTodos: (state) => state.todos
+  allTodos: (state) => state.todos,
+  oneTodo: (state) => state.todo,
 };
 
 const actions = {
   async fetchTodos({ commit }) {
     const response = await axios.get(api_url);
     commit("setTodos", response.data);
+  },
+  async fetchTodo({ commit }, id) {
+    const response = await axios.get(api_url + `/${id}`);
+    console.log(response);
+    commit("setTodo", response.data);
   },
   async deleteTodo({ commit }, id) {
     const response = await axios.delete(api_url + `/${id}`);
@@ -44,6 +51,9 @@ const actions = {
 const mutations = {
   setTodos: (state, todos) => {
     state.todos = todos;
+  },
+  setTodo: (state, todo) => {
+    state.todo = todo;
   },
   removeTodo: (state, id) => {
     const newTodos = state.todos.filter(todo => todo.id !== id);
