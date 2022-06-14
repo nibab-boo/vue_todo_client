@@ -38,8 +38,7 @@ export default {
   methods: {
     ...mapActions(['fetchTodos', 'deleteTodo', 'updateTodo']),
     onDoubleClick: function (currentTodo) {
-      console.log("clicked");
-      console.log(currentTodo);
+      if (currentTodo.completed) return;
       const updatedTodo = {
         id: currentTodo.id,
         title: currentTodo.title,
